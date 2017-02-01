@@ -20,3 +20,14 @@
 
 # Revision history:
 # ---------------------------------------------------------------------------
+
+SYMLINKS=`readlink -f $0`
+SCRIPT_DIR=`dirname $SYMLINKS`
+
+CWD=$(pwd)
+SOURCE_DIR="$SCRIPT_DIR"
+USER_HOME="$(eval echo ~)"
+TOOLS_DIR=$(cd "$SOURCE_DIR/../"; pwd)
+PROJECT_ROOT_DIR=$(cd "$SOURCE_DIR/../"; pwd)
+PARENT_DIR=$(cd "$SOURCE_DIR/.."; pwd)
+LIB_DIR=$(cd "$PARENT_DIR/lib"; pwd)

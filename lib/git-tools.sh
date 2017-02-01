@@ -33,3 +33,27 @@ SHA1=$(git rev-list $branch | tail -n $1 | head -n 1)
 
 number_of_commits=$(git rev-list HEAD --count)
 git_release_version=$(git describe --tags --always --abbrev=0)
+
+# Renames multiple tags using regexp. Usage: git_rename_tags.sh $frompattern $topattern
+function rename_tag(){
+  for tag in $(git tag -l)
+    do
+      newtag=`echo "$tag" | sed -E "s/$1/$2/"`
+        if [[ $tag != $newtag ]]; then
+            git tag $newtag $tag
+            git tag -d $tag
+            git push origin :refs/tags/$tag
+            git push --tags
+        fi
+  done
+}
+
+# Remove all git tags matching pattern passed as parameter
+function remove_tag(){
+    for tag in $(git tag -l $1)
+    do
+        git tag -d $tag
+        git push origin :refs/tags/$tag
+        git push --tags
+    done
+}

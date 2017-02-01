@@ -1,5 +1,7 @@
 #!/bin/bash
 
+shopt -s extglob
+
 #################################################################################
 # THIS SCRIPT HAS BEEN MODIFIED & ADAPTED FROM THE THE FOLLOWING GIST:
 #   --> https://gist.github.com/bclinkinbeard/1331790
