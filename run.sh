@@ -16,7 +16,7 @@
 # GNU General Public License at <http://www.gnu.org/licenses/> for
 # more details.
 
-# Usage: ./main.sh [-h|--help] [-i|--install [-u|--uninstall] [-c|--task-config]
+# Usage: ./run.sh [-h|--help] [-i|--install [-u|--uninstall] [-c|--task-config]
 
 # Revision history:
 # ---------------------------------------------------------------------------
@@ -31,3 +31,22 @@ TOOLS_DIR=$(cd "$SOURCE_DIR/../"; pwd)
 PROJECT_ROOT_DIR=$(cd "$SOURCE_DIR/../"; pwd)
 PARENT_DIR=$(cd "$SOURCE_DIR/.."; pwd)
 LIB_DIR=$(cd "$PARENT_DIR/lib"; pwd)
+
+PREFIX=${2:-"optional_prefix_"}
+YAML_INPUT_FILE=${1:-"./tag.yml"}
+
+eval "$(${LIB_DIR}/lib/yaml.sh ${YAML_INPUT_FILE} ${PREFIX})"
+
+# Obtain parse_yml variables as follows:
+echo "${optional_prefix_development_adapter}"
+
+#echo "${optional_prefix_development_apt[@]}"
+#echo ${#optional_prefix_development_apt[@]} #Print the variable lenght
+
+# get length of an array
+tLen=${#optional_prefix_development_roles[@]}
+
+# use for loop read all nameservers
+for (( i=0; i < ${tLen}; i++ )); do
+  echo ${optional_prefix_development_roles[$i]}
+done

@@ -60,7 +60,7 @@ SKIP_BRANCH_SWITCH=false
 
 LAST_COMMIT_HASH=`git log -1 --pretty=format:"%H"`
 
-function printUsage() {
+function usage() {
   echo "Usage: ${0} [option(s)]"
   echo
   echo "  -b                Skip branch manipulation. This should not be used on Jenkins, and should normally be used locally."
@@ -82,7 +82,7 @@ while getopts ":v:bhdj" OPT; do
       ALLOW_OUTSIDE_JENKINS=true
       ;;
     h)
-      printUsage
+      usage
       exit 0
       ;;
     j)
@@ -93,12 +93,12 @@ while getopts ":v:bhdj" OPT; do
       ;;
     \?)
       echo "Invalid option: -${OPTARG}" >&2
-      printUsage
+      usage
       exit 30
       ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
-      printUsage
+      usage
       exit 1
       ;;
   esac
@@ -252,7 +252,6 @@ updateProjectPomsToNextVersion
 updateToLatestParentPom
 
 updateToLatestDependencies
-
 
 #################################################################################
 # Commit/Push updated files up to the repository

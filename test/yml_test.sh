@@ -11,11 +11,13 @@ PROJECT_ROOT_DIR=$(cd "$SOURCE_DIR/../"; pwd)
 PARENT_DIR=$(cd "$SOURCE_DIR/.."; pwd)
 LIB_DIR=$(cd "$PARENT_DIR/lib"; pwd)
 
-# include parse_yaml function
-. $LIB_DIR/parse_yaml.sh
+## include parse_yaml function
+source $LIB_DIR/parse_yaml.sh
 
-# read yaml file
-eval $(parse_yaml zconfig.yml "config_")
+echo "LIB_DIR = $LIB_DIR"
 
-# access yaml content
-echo $config_development_database
+## read yaml file
+#eval $(parse_yaml zconfig.yml "config_")
+
+## access yaml content
+#echo $config_development_database

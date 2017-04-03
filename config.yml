@@ -1,0 +1,7 @@
+maven:
+  DRY_RUN: false
+  repositories:
+    - git@github.com:djanta/djanta-parent.git
+    - git@github.com:djanta/djanta-parent-nuxeo.git
+tag:
+  VERSION: 1.0.0

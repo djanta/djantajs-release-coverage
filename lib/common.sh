@@ -13,6 +13,63 @@
 # more details.
 # ---------------------------------------------------------------------------
 
+PROGNAME=`basename $0`
+GREP="grep"
+
+# OS specific support (must be 'true' or 'false').
+cygwin=false;
+darwin=false;
+linux=false;
+case "`uname`" in
+    CYGWIN*)
+        cygwin=true
+        ;;
+    Darwin*)
+        darwin=true
+        ;;
+    Linux)
+        linux=true
+        ;;
+esac
+
+# Increase the maximum file descriptors if we can
+if [ "$cygwin" = "false" ]; then
+    MAX_FD_LIMIT=`ulimit -H -n`
+    if [ "$?" -eq 0 ]; then
+        # Darwin does not allow RLIMIT_INFINITY on file soft limit
+        if [ "$darwin" = "true" -a "$MAX_FD_LIMIT" = "unlimited" ]; then
+            MAX_FD_LIMIT=`/usr/sbin/sysctl -n kern.maxfilesperproc`
+        fi
+
+	if [ "$MAX_FD" = "maximum" -o "$MAX_FD" = "max" ]; then
+	    # use the system max
+	    MAX_FD="$MAX_FD_LIMIT"
+	fi
+
+	ulimit -n $MAX_FD
+	if [ "$?" -ne 0 ]; then
+	    warn "Could not set maximum file descriptor limit: $MAX_FD"
+	fi
+    else
+	warn "Could not query system maximum file descriptor limit: $MAX_FD_LIMIT"
+    fi
+fi
+
+#
+# Helper to complain.
+#
+warn() {
+    echo "${PROGNAME}: $*"
+}
+
+#
+# Helper to puke.
+#
+die() {
+    warn $*
+    exit 1
+}
+
 function clean_up() { # Perform pre-exit housekeeping
   return
 }
@@ -24,10 +81,12 @@ function error_exit() {
 }
 
 function root_prompt() {
+  echo -e "${PROGNAME}: ${1:-"Unknown Error"}"
+
   # Check for root UID
-  if [[ $(id -u) != 0 ]]; then
-    error_exit "You must be the superuser to run this script."
-  fi
+  #if [[ $(id -u) != 0 ]]; then
+  #  error_exit "You must be the superuser to run this script."
+  #fi
 }
 
 function prepare__() {
