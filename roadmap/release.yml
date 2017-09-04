@@ -1,0 +1,21 @@
+defaults:
+  commit: tagging version to
+  #action: patch #major|prerelease|premajor|minor|preminor|patch|prepatch
+  url: git+ssh://git@github.com/djantaio/
+  origin: origin
+  version: prepatch
+  changelog: true
+  branch:
+    develop: develop
+    master: master
+alpha:
+  due: always
+  repositories:
+    -
+      name: djantaio-tools-bump
+      branch:
+        master: master
+        develop: develop
+      implies:
+        - djantaio-infinite-runtime.git
+        - djantaio-infinite-server.git

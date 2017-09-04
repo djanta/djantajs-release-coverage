@@ -1,6 +1,8 @@
 # ---------------------------------------------------------------------------
-# color.sh - This script will be use to provide our platform deployment color.sh architecture
-# Copyright 2015, Stanislas KOFFI ASSOUTOVI <team@djanta.net>
+# run.sh - This script will be use to provide our platform deployment main.sh architecture
+
+# Copyright 2015, Stanislas KOFFI ASSOUTOVI <team@djanta.io>
+
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or

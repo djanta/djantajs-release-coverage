@@ -15,13 +15,13 @@ GIT_BIN=`which git`
 BRANCH_HEAD=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 
 BRANCH_NAME=${BRANCH_HEAD:-'master'}
+DEV_BRANCH=develop
 
 # v1.0.0, v1.5.2, etc.
 VERSION_LABEL=v${1:-"1.0.0"}
 
 # establish branch and tag name variables
-MASTER_BRANCH=master
-DEV_BRANCH=develop
+MASTER_BRANCH=${BRANCH_NAME}#master
 RELEASE_BRANCH=release-$VERSION_LABEL
 
 # create the release branch from the -develop branch
@@ -43,6 +43,8 @@ git commit -am "Incrementing version number to $VERSION_LABEL"
 
 # merge release branch with the new version number into master
 git checkout $MASTER_BRANCH
+
+# now merge with no fail
 git merge --no-ff $RELEASE_BRANCH
 
 # create tag for new version from -master

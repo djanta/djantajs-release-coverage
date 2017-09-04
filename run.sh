@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ---------------------------------------------------------------------------
-# main.sh - This script will be use to provide our platform deployment main.sh architecture
+# run.sh - This script will be use to provide our platform deployment main.sh architecture
 
-# Copyright 2015, Stanislas KOFFI ASSOUTOVI <team@djanta.net>
+# Copyright 2015, Stanislas KOFFI ASSOUTOVI <team@djanta.io>
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,32 +21,36 @@
 # Revision history:
 # ---------------------------------------------------------------------------
 
-SYMLINKS=`readlink -f $0`
-SCRIPT_DIR=`dirname $SYMLINKS`
+argv0=$(echo "$0" | sed -e 's,\\,/,g')
+basedir=$(dirname "$(readlink "$0" || echo "$argv0")")
 
-CWD=$(pwd)
-SOURCE_DIR="$SCRIPT_DIR"
-USER_HOME="$(eval echo ~)"
-TOOLS_DIR=$(cd "$SOURCE_DIR/../"; pwd)
-PROJECT_ROOT_DIR=$(cd "$SOURCE_DIR/../"; pwd)
-PARENT_DIR=$(cd "$SOURCE_DIR/.."; pwd)
-LIB_DIR=$(cd "$PARENT_DIR/lib"; pwd)
+case "$(uname -s)" in
+  Linux) basedir=$(dirname "$(readlink -f "$0" || echo "$argv0")");;
+  *CYGWIN*) basedir=`cygpath -w "$basedir"`;;
+esac
 
-PREFIX=${2:-"optional_prefix_"}
-YAML_INPUT_FILE=${1:-"./tag.yml"}
+SCRIPT_DIR=`dirname ${basedir}`
+LIB_DIR=$(cd "$SCRIPT_DIR/lib"; pwd)
 
-eval "$(${LIB_DIR}/lib/yaml.sh ${YAML_INPUT_FILE} ${PREFIX})"
+PREFIX=${2:-"X"}
+YAML_INPUT_FILE=${1:-"tag.yml"}
+
+conf=$(cat ${YAML_INPUT_FILE})
+
+eval "$(${LIB_DIR}/yaml.sh ${YAML_INPUT_FILE} ${PREFIX})"
 
 # Obtain parse_yml variables as follows:
-echo "${optional_prefix_development_adapter}"
+echo "${X_public_adapter}"
 
-#echo "${optional_prefix_development_apt[@]}"
-#echo ${#optional_prefix_development_apt[@]} #Print the variable lenght
+#echo "${optional_prefix_public_apt[@]}"
+#echo ${#optional_prefix_public_apt[@]} #Print the variable lenght
 
 # get length of an array
-tLen=${#optional_prefix_development_roles[@]}
+tLen=${#X_public_public_projects_roles[@]}
 
 # use for loop read all nameservers
 for (( i=0; i < ${tLen}; i++ )); do
-  echo ${optional_prefix_development_roles[$i]}
+  echo ${X_public_public_projects_roles[$i]}
 done
+
+#echo "${conf}"
