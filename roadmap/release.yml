@@ -6,16 +6,17 @@ defaults:
   version: prepatch
   changelog: true
   branch:
-    develop: develop
+    draft: develop
     master: master
 alpha:
-  due: always
+  due: always #the first date of each month
   repositories:
     -
       name: djantaio-tools-bump
       branch:
         master: master
-        develop: develop
-      implies:
+        draft: develop
+      dependencies:
         - djantaio-infinite-runtime.git
         - djantaio-infinite-server.git
+      releases: # release the following repository prior to the master ...

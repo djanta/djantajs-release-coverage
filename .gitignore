@@ -1,5 +1,5 @@
 .idea
 **/*.iml
-package-lock.json
 node_modules
-lib
+scripts
+run.sh

@@ -1,0 +1,25 @@
+defaults:
+  commit: tagging version to
+  url: git@github.com:djantaio
+  origin: origin
+  changelog: true
+  archetype: npm
+  branch:
+    draft: develop
+    master: master
+alpha:
+  repositories:
+    -
+      name: djantaio-bump-test
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
