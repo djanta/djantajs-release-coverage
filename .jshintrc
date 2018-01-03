@@ -1,4 +1,6 @@
+//http://jshint.com/docs/options/
 {
+  "esversion": 6,
   "curly": true,
   "eqeqeq": true,
   "immed": true,
@@ -9,5 +11,8 @@
   "undef": true,
   "boss": true,
   "eqnull": true,
-  "node": true
+  "node": true,
+  "varstmt": true,
+  "mocha": true,
+  "jasmine": true
 }
