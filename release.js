@@ -10,6 +10,8 @@ const dateutil = require('dateutil');
 const FORMAT = 'yyyy-mm-dd h:MM:ss';
 const util = require('util');
 
+let conventionalChangelog = require('conventional-changelog');
+
 const argv = require('yargs')
   .usage('Usage: $0 --file [file]')
     .alias('f', 'file')
@@ -26,11 +28,6 @@ const argv = require('yargs')
     //Define the git origin options
     .alias('u', 'url').array('u')
     .describe('u', 'Use this option to define which git server url prifix which will use to complete the repository full url')
-
-    //Define the version options
-    /*.alias('v', 'version')
-    .describe('v', 'Use this option to force the root verion for the given roadmap.' +
-      'The given version here will overrive and the dry-run version provided by the roadmap config')*/
 
     //Define the roadmap tag version
     .alias('t', 'tag').default('t', 'patch')
@@ -59,8 +56,8 @@ const argv = require('yargs')
     .coerce('changelog', (changelog) => /(yes|Yes|y|Y)$/.test(changelog))
 
     //Specify the branch roadmap which correspond to the traget branch
-    .alias('E', 'roadmap').demandOption('E').array('E')
-    .describe('E', 'Specify that source Git branch where the event come from')
+    .alias('e', 'roadmap').demandOption('e').array('e')
+    .describe('e', 'Specify that source Git branch where the event come from')
 
   .fail((msg, err, yargs) => {
     console.error(msg);
@@ -124,121 +121,120 @@ const facets = {
       allow: ['major', 'premajor', 'minor', 'preminor', 'patch', 'prepatch', 'prerelease', 'from-git']
     },
     which: shell.which('npm'),
-    build: (rep, directory, fallback) => {
-      console.log('Working with directory: [%s] -> %s', rep.name, directory);
+    build: (repository, directory, callback) => {
+      console.log('Working with directory: [%s] -> %s', repository.name, directory);
 
-      let cmd = ['git clone --verbose', rep.href, rep.name];
-      shell.cd(directory); //Jump into the target directory
+      let cloneCmd = ['git clone --verbose', repository.href, repository.name];
+      shell.cd (directory); //Jump into the target directory
 
-      let rslt = shell.exec(cmd.join(' '), {silent: true});
+      let rslt = shell.exec(cloneCmd.join(' '), { silent: false });
       if(rslt.code > 0) {
         console.error('The following error occured: \n%s', rslt.stderr);
         throw new Error(rslt.stderr);
       }
-      else{
-        let project = Path.join(directory, rep.name), pkg = Path.join(project, 'package.json');
+      else {
+        let project = Path.join(directory, repository.name), _package = Path.join(project, 'package.json');
 
-        if (isFile(pkg)) {
-          shell.cd(project); //Jump into the cloned directory ...
+        if (isFile (_package)) {
+          shell.cd (project); //Jump into the cloned directory ...
 
-          shell.exec('git checkout ' + rep.branch.draft, {silent: false});
-          shell.exec('git checkout -b release ', {silent: false});
+          shell.exec('git checkout ' + repository.branch.draft, { silent: false });
+          shell.exec('git checkout -b release ', { silent: false });
 
-          let opt = {silent: false}, version = (rep.version && (null !== semver.valid(rep.version)
-              || !!~facets.npm.version.allow.indexOf(rep.version))) ?
-            shell.exec('npm version ' + rep.version, opt).stdout : shell.exec('npm version patch', opt).stdout,
+          let options = { silent: false }, version = (repository.version && (null !== semver.valid(repository.version)
+              || !!~facets.npm.version.allow.indexOf(repository.version))) ?
+            shell.exec('npm version ' + repository.version, options).stdout : shell.exec('npm version patch', options).stdout,
             label = 'release-' + semver.clean(version), tag = semver.clean(version);
 
-          let _installNpm = !rep.command ? () => {}: () => {
-            ((typeof rep.command === 'string') ? [rep.command] : rep.command).forEach((x) => {
-              let xcmd = shell.exec(x, opt);
-              //console.log(xcmd.stdout);
+          let _installNpm = !repository.command ? () => {}: () => {
+            (typeof repository.command === 'string' ? [repository.command] : repository.command).forEach(x => {
+              let xresult = shell.exec(x, options); console.log(xresult.stdout);
             })
           };
 
-          console.log('Dependencies -> %s', JSON.stringify(rep.dependencies, null, 2));
+          console.log('Dependencies -> %s', JSON.stringify(repository.dependencies, null, 2));
 
-          let _dependencyNpm = !rep.dependencies ? () => {} : () => {
-            ((typeof rep.dependencies === 'string') ? [rep.dependencies] : rep.dependencies).forEach((dep) => {
-              let xcmd;
-              if(typeof dep === 'string') {
-                xcmd = shell.exec('npm i -S ' + dep, opt);
-              } else if(dep.name){
-                let normalized = 'npm i ' + (dep.scope ? '--' + dep.scope : '-S') + ' ' + (dep.version ? dep.name + '@' +
-                  dep.version : dep.name);
+          let _dependency = !repository.dependencies ? () => {} : () => {
+            ((typeof repository.dependencies === 'string') ? [repository.dependencies] : repository.dependencies)
+              .forEach(dependency => {
+                let xcmd;
+                if(typeof dependency === 'string') {
+                  xcmd = shell.exec('npm i -S ' + dependency, options);
+                }
+                else if(dependency.name) {
+                  let normalized = 'npm i ' + (dependency.scope ? '--' + dependency.scope : '-S') + ' ' +
+                    (dependency.version ? dependency.name + '@' + dependency.version : dependency.name);
 
-                xcmd = shell.exec(normalized, opt);
-              }
+                  xcmd = shell.exec(normalized, options);
+                }
 
-              if(xcmd) {console.log(xcmd.stderr);}
+                if(xcmd) { console.log(xcmd.stderr); }
             })
+          };
+
+          //let standardChangelog = require('standard-changelog');
+
+          let _changelog = () => {
+            //standardChangelog()
+            //  .pipe(process.stdout); // or any writable stream
+
+            conventionalChangelog({
+              preset: 'angular'
+            })
+              .pipe(() => console.log(require('util').inspect(arguments))); // or any writable stream
           };
 
           let flows = {
             install: _installNpm,
-            dependency: _dependencyNpm,
+            dependency: _dependency,
             rename: ['git branch -m', tag],
-            //add: ['git add', '.'],
+            status: ['git status'],
+            add: ['git add', '--verbose', '-u', '.'],
+            reset: ['git reset', '--', 'node_modules'],
             commit: ['git commit', '-a', '-m', '"Incrementing version number to', label + '"'],
 
+            changelog: _changelog,
+
             //Merge the tag branch into the master and push the master branch
-            master: ['git checkout', rep.branch.master],
+            master: ['git checkout', repository.branch.master],
             masterMerge: ['git merge --no-ff', tag],
-            masterPush: ['git push origin', rep.branch.master],
+            //masterPush: ['git push origin', repository.branch.master],
 
             //Tag and push the version ...
             releasing: ['git tag', '-a', '-m', '"Releasing tagged version', tag + '"', tag],
-            pushTag: ['git push origin', version.trim()],
+            //pushTag: ['git push origin', version.trim()],
           };
 
           // Fixing to avoid self branch merge.
-          if(rep.branch.draft !== rep.branch.master) {
-            //Merge the develop branch with the master
-            flows.draft = ['git checkout', rep.branch.draft];
-            flows.draftMerge = ['git merge --no-ff', rep.branch.master];
-            flows.draftPush = ['git push origin', rep.branch.draft];
+          if(repository.branch.draft !== repository.branch.master) {
+            // Merge the develop branch with the master
+            flows.draft = ['git checkout', repository.branch.draft];
+            flows.draftMerge = ['git merge --no-ff', repository.branch.master];
+            //flows.draftPush = ['git push origin', repository.branch.draft];
           }
 
           //Force delete the tagged branch. Please this insertion must the last statement. Do not remove it
           flows.remove = ['git branch -D', tag];
 
           try {
-            Object.keys(flows).forEach((name) => {
+            Object.keys(flows).forEach(name => {
               if (typeof flows[name] === 'function') {
-                try {
-                  flows[name]();
-                } catch (e){console.error(e);}
-              } else{
-                let command = flows[name].join(' ');
-                console.log('Running [%s] -> [%s]', name, command);
-                //shell.exec(command, opt);
+                try { flows[name](); }
+                catch (e){ console.error(e); }
+              }
+              else {
+                let flow = flows[name].join(' ');
+                //console.log('Running [%s] -> [%s]', name, flow);
+                //shell.exec(flow, options);
               }
             });
           }
-          catch (ex){}
+          catch (ex) { console.error(ex); }
           finally {
             shell.rm('-rf', project);
           }
         }
       }
-
-      /*shell.exec(cmd.join(' '), (code, stdout, stderr) => {
-        shell.ls();
-
-        let project = Path.join(directory, definition.name), xlocation = Path.join(project, 'package.json');
-        if (0 === code && Fs.existsSync(xlocation) && Fs.statSync(xlocation).isFile()) {
-          shell.cd(project); //Jump into the cloned directory ...
-
-          //let version = shell.exec('npm version patch', {silent:true}).stdout;
-          //console.log('Prepatch# %s', version);
-
-          shell.cd('..'); //jump one step back, meaning exist the cloned directory ...
-          if (cb) cb(stdout, undefined); //Sucessfully callback ...
-        }
-        else {
-          if (code > 0 && cb) cb(stdout, stderr); //Errored callback ...
-        }
-      });*/
     }
   }
 };
@@ -265,9 +261,7 @@ let _bump = (name, descriptor, defaults = {}, cache = {}) => {
       let directory = Path.join(CWD, '.djanta-bump');
       shell.mkdir('-p', directory); //With the -p option, the target working directory will be created if needed
 
-      archetype.build(repository, directory, (data, err) => {
-        //if (!err) shell.rm('-rf', directory);
-      });
+      archetype.build (repository, directory, (data, err) => {});
     }
   });
 };
@@ -276,7 +270,7 @@ if (HAS_GIT_INSTALLED && HAS_NPM_INSTALLED) {
   let descriptor = YAML.sync(argv.file /*Path.resolve(DIRNAME, DEFAULT_ROADMAP)*/), defaults = descriptor['defaults'];
   (argv['roadmap'] || Object.keys(descriptor)).forEach(name => _bump(name, descriptor[name], defaults));
 }
-else{
+else {
   shell.echo('Sorry, this script requires git');
   shell.exit(1);
 }
