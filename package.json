@@ -37,8 +37,7 @@
     "lint-html": "./node_modules/.bin/eslint **/*.js -f html -o ./reports/lint-results.html",
     "hint": "./node_modules/.bin/jshint --verbose --config .jshintrc --reporter jslint",
     "test": "npm run hint && npm run lint-html && nyc ./node_modules/.bin/mocha ./test --reporter spec --recursive --timeout 3000 --inspect --use_strict --expose-gc --colors",
-    "coverage": "npm run hint && npm run lint-html && nyc npm test && nyc report --reporter=text-lcov | coveralls",
-    "version": "./node_modules/.bin/conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && git add CHANGELOG.md"
+    "coverage": "npm run hint && npm run lint-html && nyc npm test && nyc report --reporter=text-lcov | coveralls"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -63,7 +62,6 @@
     "semver": "^5.4.1",
     "shelljs": "^0.7.8",
     "verb": "^0.8.10",
-    "yargs": "^8.0.2",
-    "conventional-changelog": "^1.1.15"
+    "yargs": "^8.0.2"
   }
 }
