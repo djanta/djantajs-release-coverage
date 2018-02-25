@@ -9,8 +9,7 @@ const _ = require('lodash');
 const dateutil = require('dateutil');
 const FORMAT = 'yyyy-mm-dd h:MM:ss';
 const util = require('util');
-
-let utils = require('./lib/utils');
+const utils = require('./lib/utils');
 
 const argv = require('yargs')
   .usage('Usage: $0 --file [file]')
@@ -80,10 +79,8 @@ const argv = require('yargs')
 const shell = require('shelljs');
 const YAML = require('read-yaml');
 const semver = require('semver');
-//const verb = require('verb');
 const changelog = require('changelog');
 
-const REGEX = /(?:git|ssh|https?|git@[-\w.]+):(\/\/)?(.*?)(\.git)(\/?|\#[-\d\w._]+?)$/;
 const bin = Path.resolve(__dirname, 'node_modules', '.bin', 'changelog');
 
 shell.config = {
@@ -136,7 +133,7 @@ let _bump = (name, descriptor, defaults = {}, cache = {}) => {
     });
 
     let archetype = facets[working.archetype], directory /* Use npm project type as defaukt facet */;
-    if(REGEX.test(working.href) && archetype && (typeof archetype.enabled === 'undefined' || archetype.enabled)
+    if(utils.isUrl(working.href) && archetype && (typeof archetype.enabled === 'undefined' || archetype.enabled)
       && (typeof archetype.which === 'undefined' || archetype.which)) {
 
       if(!_.isNil(argv['gitProject']) && utils.isDirectory(argv['gitProject'])) {
