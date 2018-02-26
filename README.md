@@ -64,9 +64,9 @@ Examples:
   $ djantaio-bump --file <MANIFEST FILE> --semver-tag <YOUR TAEGET VERSION> ...
 ```
 
-Manifest Structure
+Manifest Overview
 --------------------------
-As specified with the option `-- file`, here below how you can declare your manifest file
+As specified with the option `--file`, here below how you can declare your manifest file
 
 ```yaml
 defaults:
@@ -118,9 +118,28 @@ Default value: ``
 
 A string value that define your git repository host url. The property can overrided by the command line `-u, --url-prefix`
 
-#### options`.<#any>`
+#### options`.<#roadmap>`
 Type: `Object`
 
+Here's will take place your roadmap configuration.
+
+##### options`.<#roadmap>`.repositories
+Type: `Arrays` <br/>
+
+Define the list of the target repository which should be bumped
+
+###### options`.<#roadmap>`.repositories.tag
+Type: `bool` <br/>
+Default value: `true`
+
+Define whether the current repository should be tagged. This's basically synomym of `enabled`
+
+###### options`.<#roadmap>`.repositories.name
+Type: `String` <br/>
+Default value: ` ` <br/>
+Required: `true`
+
+Here's where you can define the target repository name without the `.git` extension.
 
 Version Scripts
 --------------------------
