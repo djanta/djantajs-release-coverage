@@ -1,5 +1,4 @@
 defaults:
-  commit: tagging version to
   url: git@github.com:djantaio
   origin: origin
   changelog: true
@@ -7,10 +6,127 @@ defaults:
   branch:
     draft: develop
     master: master
-alpha:
+  version: patch
+
+prerelease:
   repositories:
     -
+      tag: true
       name: djantaio-bump-test
+      version: prerelease
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+prepatch:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      version: prepatch
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+patch:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+preminor:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      version: preminor
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+minor:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      version: minor
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+premajor:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      version: premajor
+      archetype: npm
+      branch:
+        master: master
+        draft: develop
+      command:
+        - "npm install"
+        #- "npm run compile"
+      dependencies:
+        -
+          name: lodash
+          version: latest
+        - dateutil
+
+major:
+  repositories:
+    -
+      tag: true
+      name: djantaio-bump-test
+      version: major
       archetype: npm
       branch:
         master: master
