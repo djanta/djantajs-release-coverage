@@ -141,6 +141,27 @@ Required: `true`
 
 Here's where you can define the target repository name without the `.git` extension.
 
+###### options`.<#roadmap>`.repositories.archetype
+Type: `String` <br/>
+Default value: `npm` <br/>
+Required: `true`
+
+Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, this can be overrided with the comment line `--archetype`
+
+###### options`.<#roadmap>`.repositories.branch
+Type: `Object` <br/>
+Default value: 
+```yaml
+  branch:
+    draft: draft
+    master: master
+```
+Required: `true`
+
+Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, this can be overrided with the comment line `--archetype`
+
+
+
 Version Scripts
 --------------------------
 `djantaio-tools-bump` will execute your `preversion`, `version`, and `postversion` scripts, just like [the `npm version` command](https://docs.npmjs.com/cli/version) does. If your `package.json` file contains any or all of these scripts, then they will be executed in the following order:
