@@ -92,22 +92,9 @@ shell.config = {
   verbose: true,
 };
 
-//const init = require('init');
-
 const CWD = process.cwd();
 const HAS_GIT_INSTALLED = shell.which('git');
 const HAS_NPM_INSTALLED = shell.which('npm');
-
-//https://github.com/npm/node-semver
-/*const VERSION_PROFILE = [
-  'major',
-  'premajor',
-  'minor',
-  'preminor',
-  'patch',
-  'prepatch',
-  'prerelease'
-];*/
 
 const facets = {
   npm: require('./lib/archetypes/npm')
@@ -117,36 +104,41 @@ let _bump = (name, descriptor, defaults = {}, cache = {}) => {
   if(name === 'defaults' || !descriptor) { return; /* Just make the return */ }
 
   //defaults.version = argv.version || defaults.version;
-  (descriptor.repositories || []).forEach(working => {
-    working.url = working.url || defaults.url;
+  (descriptor.repositories || []).forEach(repository => {
+    repository.url = repository.url || defaults.url;
 
     //Force to update with command line prefix if any ...
-    working.url = !_.isNil(argv['urlPrefix']) ? argv['urlPrefix'] : working.url;
+    repository.url = !_.isNil(argv['urlPrefix']) ? argv['urlPrefix'] : repository.url;
 
-    let sep = working.url.endsWith('/') ? '' : '/', suffix = working.name.endsWith('.git') ? '' : '.git',
+    let sep = repository.url.endsWith('/') ? '' : '/', suffix = repository.name.endsWith('.git') ? '' : '.git',
       tag = argv['semverTag'];
 
-    working = _.merge ({ branch: {} }, defaults, working, {
-      changelog: argv.changelog || (working.changelog || (defaults.changelog || true)),
-      href: (working.url + '' + sep + '' + working.name) + '' + suffix,
-      version: !_.isNil(tag) ? tag : (!_.isNil(working.version) ? working.version : defaults.version),
+    repository = _.merge ({ branch: {} }, defaults, repository, {
+      changelog: argv.changelog || (repository.changelog || (defaults.changelog || true)),
+      href: (repository.url + '' + sep + '' + repository.name) + '' + suffix,
+      version: !_.isNil(tag) ? tag : (!_.isNil(repository.version) ? repository.version : defaults.version),
+      messages: !_.isNil(repository.messages) ? repository.messages
+        : (!_.isNil(defaults.messages) ? defaults.messages : {
+            commit: defaults.commit || 'Incrementing to version %s',
+            tag: defaults.tag || 'Releasing version %s'
+        })
     });
 
-    let archetype = facets[working.archetype], directory /* Use npm project type as defaukt facet */;
-    if(utils.isUrl(working.href) && archetype && (typeof archetype.enabled === 'undefined' || archetype.enabled)
+    let archetype = facets[repository.archetype], directory /* Use npm project type as defaukt facet */;
+    if(utils.isUrl(repository.href) && archetype && (typeof archetype.enabled === 'undefined' || archetype.enabled)
       && (typeof archetype.which === 'undefined' || archetype.which)) {
 
       if(!_.isNil(argv['gitProject']) && utils.isDirectory(argv['gitProject'])) {
         directory = argv['gitProject'];
-        working.project = argv['gitProject'];
+        repository.project = argv['gitProject'];
       }
       else {
-        directory = Path.join(CWD, '.djanta-bump'); working.cleanup = true;
+        directory = Path.join(CWD, '.djanta-bump'); repository.cleanup = true;
       }
 
       if(!utils.isDirectory(directory)) { shell.mkdir('-p', directory); }
 
-      archetype.build (working, directory, (data, err) => {});
+      archetype.build (repository, directory, (data, err) => {});
     }
   });
 };

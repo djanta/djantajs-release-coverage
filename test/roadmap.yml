@@ -1,5 +1,4 @@
 defaults:
-  commit: tagging version to
   url: git@github.com:djantaio
   origin: origin
   changelog: true
