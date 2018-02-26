@@ -102,65 +102,84 @@ prerelease:
 ### Options
 
 #### options.defaults
-Type: `Object`
+**Type**: `Object`
 
 The default configuration remain the top level where you'd like to define all the common properties shared by bumping strategy such as your repository host url.
 
 ##### options.defaults.url
-Type: `String` <br/>
-Default value: ``
+**Type**: `String` <br/>
+**Default value**: ``
 
 A string value that define your git repository host url. The property can overrided by the command line `-u, --url-prefix`
 
 ##### options.defaults.origin
-Type: `String` <br/>
-Default value: ``
+**Type**: `String` <br/>
+**Default value**: `origin`
 
-A string value that define your git repository host url. The property can overrided by the command line `-u, --url-prefix`
+A string value given to override the default repository url name.
 
 #### options`.<#roadmap>`
-Type: `Object`
+**Type**: `Object`
 
 Here's will take place your roadmap configuration.
 
 ##### options`.<#roadmap>`.repositories
-Type: `Arrays` <br/>
+**Type**: `Arrays` <br/>
 
 Define the list of the target repository which should be bumped
 
 ###### options`.<#roadmap>`.repositories.tag
-Type: `bool` <br/>
-Default value: `true`
+**Type**: `bool` <br/>
+**Default value**: `true`
 
 Define whether the current repository should be tagged. This's basically synomym of `enabled`
 
 ###### options`.<#roadmap>`.repositories.name
-Type: `String` <br/>
-Default value: ` ` <br/>
-Required: `true`
+**Type**: `String` <br/>
+**Default value**: ` ` <br/>
+_**Required**_: `true`
 
 Here's where you can define the target repository name without the `.git` extension.
 
 ###### options`.<#roadmap>`.repositories.archetype
-Type: `String` <br/>
-Default value: `npm` <br/>
-Required: `true`
+**Type**: `String` <br/>
+**Default value**: `npm` <br/>
+_**Required**_: `true`
 
 Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, this can be overrided with the comment line `--archetype`
 
 ###### options`.<#roadmap>`.repositories.branch
-Type: `Object` <br/>
-Default value: 
+**Type**: `Object` <br/>
+**Default value**: 
 ```yaml
   branch:
-    draft: draft
+    draft: develop
     master: master
 ```
-Required: `true`
+_**Required**_: `true`
 
-Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, this can be overrided with the comment line `--archetype`
+The branch configuration scope provide the way through to configure the working branch and the master branch. 
+  - `draft` : the draft branch represent the current working branch where to tag from as the
+  - `master`: branch reprsent to merge to after the working branch has been bumped and tagged 
 
+Either `branch.draft` and `branch.master` can be overrided with the command lines `--draft-branch|-D` and `--master-branch|-M`
 
+###### options`.<#roadmap>`.repositories.commad
+**Type**: `Array` <br/>
+**Default value**: ` ` <br/>
+_**Required**_: `false`
+
+The options `command` define a list of commad which should executed after bumping your project and before it's become tagged
+
+###### options`.<#roadmap>`.repositories.dependencies
+**Type**: `Array` <br/>
+**Default value**: 
+```yaml
+  branch:
+    draft: develop
+    master: master
+```
+_**Required**_: `false`
 
 Version Scripts
 --------------------------
