@@ -1,6 +1,6 @@
 {
   "name": "djantaio-tools-bump",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "djanta.io releasing tool module based on node implementation",
   "homepage": "www.djanta.io",
   "license": "MIT",
