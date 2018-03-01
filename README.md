@@ -2,13 +2,9 @@
 
 [![npm version](https://img.shields.io/npm/v/djantaio-tools-bump?style=flat-square)](https://www.npmjs.com/package/djantaio-tools-bump)
 [![npm downloads](https://img.shields.io/npm/dm/djantaio-tools-bump.svg?style=flat-square)](https://www.npmjs.com/package/djantaio-tools-bump)
-[![GitHub tag](https://img.shields.io/github/tag/djanta/djantaio-tools-bump)](https://github.com/djantaio/djantaio-tools-bump/tags)
+[![GitHub tag](https://img.shields.io/github/tag/djanta/djantaio-tools-bump)](https://github.com/djanta/djantaio-tools-bump/tags)
 [![Github All Releases](https://img.shields.io/github/downloads/djanta/djantaio-tools-bump/latest/total.svg)](https://github.com/djanta/djantaio-tools-bump/releases)
-[![Build Status](https://api.travis-ci.org/djanta/djantaio-tools-bump.svg?branch=master)](https://travis-ci.org/djantaio/djantaio-tools-bump)
-[![Windows Build Status](https://ci.appveyor.com/api/projects/status/github/djanta/djantaio-tools-bump?svg=true&branch=master&failingText=Windows%20build%20failing&passingText=Windows%20build%20passing)](https://ci.appveyor.com/project/djanta/djantaio-tools-bump/branch/master)
-[![Inline docs](http://inch-ci.org/github/djanta/djantaio-tools-bump.svg?branch=master&style=shields)](http://inch-ci.org/github/djanta/djantaio-tools-bump)
 [![Dependencies](https://david-dm.org/djanta/djantaio-tools-bump.svg)](https://david-dm.org/bigstickcarpet/djantaio-tools-bump)
-[![npm](http://img.shields.io/npm/v/djantaio-tools-bump.svg)](https://www.npmjs.com/package/djantaio-tools-bump)
 [![License](https://img.shields.io/npm/l/djantaio-tools-bump.svg)](LICENSE)
 
 > Uses djanta platform plugin bumping tools.
