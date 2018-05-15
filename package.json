@@ -31,6 +31,9 @@
     "djantaio-bump": "./release.js"
   },
   "main": "release.js",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "echo '== echo =='",
     "lint": "./node_modules/.bin/eslint **/*.js",

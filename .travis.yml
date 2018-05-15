@@ -1,0 +1,24 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js:
+  - '7'
+  - '6'
+  - '5'
+  - '4'
+
+script: echo "Running tests against $(node -v) ..."
+after_success:
+  - echo "Running after success step ..."
+before_deploy:
+  - echo "Running before deploy step ..."
+deploy:
+  provider: npm
+  email: ben@npmjs.com
+  api_key:
+    secure: TPABHmI0IMJYCPu4akjB74a2g8WoRoMUbkKrFZvwgLHx48CzFBkead2TOgAy+H+Ig7oTmndtp+Ulf6CgTtZpek3ygaRdQhETN3UdXdTPiZECwpryZ79b+RosnOGH92skcsXWP0beDLXc0Vz2QqfWK76o9XbrBU4WJpmiG1Wl+EH7EBfHymNBxYS6eXKlO7AuLA5gpUCMjaqZf7XAdI/p+BT0QHrRZz0j6mpKQ06Dq2awkcll2hdqPzti2nL9Ge5jYFPCLyyd0YfuHn1XQz+1hiyQkGLPx0M3/PJGKtAMm67aT/CpXh5UAlpZaw5PO3nU5tIqvz8MdSW7AoDn584TROMCF6FvBCGFgiqokgnjLmeHYTgYdORLXhHV+s7NQfaHbxQccEZGvbvkeJBPYsJw8xHUwmIgygIV4O++nZpPJBaIcjJtgD1olu2wC7KQm+Wi/r5cTcwWMVimNqv0mLNxjhz/pkdbyd0b4D82r+KsE3aksFQ4Z3U1LwQPmjjHvFIkaN7ArXqFd1J5eA2zIRDsClEGSsd3/D8RPtUyir/Cn0FXPdWolhekfTv9zyXTXzTYyAZbUJYjcT0vC83O9i3Jngnj3MkTfeTEMdmQYlNXFb8V5Pd57nJsAbNO5603hhq4CgrPatrnMEhOmLOK/wk3xC7Iay7RVELHA5ZXLGV5Cug=
+  on:
+    tags: true
+    repo: djanta/djantaio-tools-bump
+after_deploy:
+  - echo "Running after deploy step ..."
