@@ -39,7 +39,7 @@ notifications:
         by %{author} %{result} in %{duration}
   webhooks:
     urls:
-      - https://webhooks.gitter.im/e/527ecb157afe8c3f6eb9
+      - https://webhooks.gitter.im/e/370109931d763890a3bf
     on_success: change
     on_failure: always
     on_start: never
