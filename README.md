@@ -7,6 +7,7 @@
 [![Build Status](https://travis-ci.org/djanta/djantaio-tools-bump.svg?branch=master)](https://travis-ci.org/djanta/djantaio-tools-bump)
 [![Dependencies](https://david-dm.org/djanta/djantaio-tools-bump.svg)](https://david-dm.org/bigstickcarpet/djantaio-tools-bump)
 [![License](https://img.shields.io/npm/l/djantaio-tools-bump.svg)](LICENSE)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/djantajs/tools?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 > Uses djanta platform plugin bumping tools.
 

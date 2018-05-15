@@ -8,17 +8,41 @@ node_js:
   - '4'
 
 script: echo "Running tests against $(node -v) ..."
+
 after_success:
   - echo "Running after success step ..."
+
 before_deploy:
   - echo "Running before deploy step ..."
+
 deploy:
   provider: npm
-  email: ben@npmjs.com
+  email: $NPM_EMAIL
   api_key:
     secure: TPABHmI0IMJYCPu4akjB74a2g8WoRoMUbkKrFZvwgLHx48CzFBkead2TOgAy+H+Ig7oTmndtp+Ulf6CgTtZpek3ygaRdQhETN3UdXdTPiZECwpryZ79b+RosnOGH92skcsXWP0beDLXc0Vz2QqfWK76o9XbrBU4WJpmiG1Wl+EH7EBfHymNBxYS6eXKlO7AuLA5gpUCMjaqZf7XAdI/p+BT0QHrRZz0j6mpKQ06Dq2awkcll2hdqPzti2nL9Ge5jYFPCLyyd0YfuHn1XQz+1hiyQkGLPx0M3/PJGKtAMm67aT/CpXh5UAlpZaw5PO3nU5tIqvz8MdSW7AoDn584TROMCF6FvBCGFgiqokgnjLmeHYTgYdORLXhHV+s7NQfaHbxQccEZGvbvkeJBPYsJw8xHUwmIgygIV4O++nZpPJBaIcjJtgD1olu2wC7KQm+Wi/r5cTcwWMVimNqv0mLNxjhz/pkdbyd0b4D82r+KsE3aksFQ4Z3U1LwQPmjjHvFIkaN7ArXqFd1J5eA2zIRDsClEGSsd3/D8RPtUyir/Cn0FXPdWolhekfTv9zyXTXzTYyAZbUJYjcT0vC83O9i3Jngnj3MkTfeTEMdmQYlNXFb8V5Pd57nJsAbNO5603hhq4CgrPatrnMEhOmLOK/wk3xC7Iay7RVELHA5ZXLGV5Cug=
   on:
     tags: true
     repo: djanta/djantaio-tools-bump
+
 after_deploy:
   - echo "Running after deploy step ..."
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - djantaio:1GeeSv1noSekK9to1yTqsbDw#tools
+    on_success: always
+    on_failure: always
+    template:
+      - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch}
+        by %{author} %{result} in %{duration}
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/527ecb157afe8c3f6eb9
+    on_success: change
+    on_failure: always
+    on_start: never
+env:
+  global:
+    secure: jp7D06Y+4XOLRNiCZRQbLB/6q6RyBztzEO0kLHyyw0hQ7s0s3mmPbWRGxfvGIh3xNDLnMuyx+YzrjdhGNLHFNne+ALWcM7HVRAoFwEdr/cXjoC3izUuHNrRWMnyeSIscecf+J/LGjIhqXpmWRmy7i+lt6D7833fayE211dXbfYpqOGhTzX3d/hxLoyo91EGoZDRSRTEU7U4RmklDMud/GWSpy3k0Qgrx2JE8n7hsknMXXMjVYAeykFcndC87bqa9g610mPCeL6MmNirgnU1lLRmn70OFi271N+BGeHLxz/fbGmEjQIIXODi7W8VzFb5rhdFBW98hXIpvQg4k+ZHdySofrg/p0N4SEs70E92szkT+sz0qEkP3a9eaKKFikN8UBLxQG96QNf0VpHHbXMySGulNyj7AOjFZKBxpMEC4YBI0IcLSkJLX0RkyeSjSwShsCrAF98NUdzQ6niYfhZp2Sgeu1ef1h2qQkSTWFLDsqwZCxNhUY8srOIGpOXII0BLcpo1HR08VQFT6CimcSxIVjIiMe0pHxlnmrko3+8y/QYmucArVTGFo60y6fSxrDz8Oj1+rjTFJmEcpbGdPEUBtfw7zhC1Ore8JrD6M2484ugMvA4NNKrzp5JTLlUcfSwYlQi9q/UGHizBmCLbQEySoxIAjwzIG4pkI0nKfLuU5oD4=
