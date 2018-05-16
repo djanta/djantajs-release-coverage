@@ -16,10 +16,9 @@ before_install:
   - git config credential.helper "store --file=.git/credentials"
   - echo "https://$GH_TOKEN:@github.com" > .git/credentials
 
-  #- curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > docker-compose.temp
-
-
-script: echo "Running tests against $(node -v) ..."
+script:
+  - echo "Running tests against $(node -v) ..."
+  - echo "Npm deploy email= $NPM_EMAIL"
 
 after_success:
   - echo "Running after success step ..."
@@ -29,7 +28,7 @@ before_deploy:
 
 deploy:
   provider: npm
-  email: $NPM_EMAIL
+  #email: $NPM_EMAIL
   api_key:
     secure: TPABHmI0IMJYCPu4akjB74a2g8WoRoMUbkKrFZvwgLHx48CzFBkead2TOgAy+H+Ig7oTmndtp+Ulf6CgTtZpek3ygaRdQhETN3UdXdTPiZECwpryZ79b+RosnOGH92skcsXWP0beDLXc0Vz2QqfWK76o9XbrBU4WJpmiG1Wl+EH7EBfHymNBxYS6eXKlO7AuLA5gpUCMjaqZf7XAdI/p+BT0QHrRZz0j6mpKQ06Dq2awkcll2hdqPzti2nL9Ge5jYFPCLyyd0YfuHn1XQz+1hiyQkGLPx0M3/PJGKtAMm67aT/CpXh5UAlpZaw5PO3nU5tIqvz8MdSW7AoDn584TROMCF6FvBCGFgiqokgnjLmeHYTgYdORLXhHV+s7NQfaHbxQccEZGvbvkeJBPYsJw8xHUwmIgygIV4O++nZpPJBaIcjJtgD1olu2wC7KQm+Wi/r5cTcwWMVimNqv0mLNxjhz/pkdbyd0b4D82r+KsE3aksFQ4Z3U1LwQPmjjHvFIkaN7ArXqFd1J5eA2zIRDsClEGSsd3/D8RPtUyir/Cn0FXPdWolhekfTv9zyXTXzTYyAZbUJYjcT0vC83O9i3Jngnj3MkTfeTEMdmQYlNXFb8V5Pd57nJsAbNO5603hhq4CgrPatrnMEhOmLOK/wk3xC7Iay7RVELHA5ZXLGV5Cug=
   on:
