@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.3] - 2018-05-16
+### Added
+- Fixing travis configuration *skip_cleanup: true*
+
 ## [1.1.2] - 2018-05-16
 ### Added
 - Fixing *$NPM_EMAIL* by introducing the travis encrypted nmp user email
@@ -46,7 +50,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public version publication.
 
-[Unreleased]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.3...HEAD
+[1.1.3]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.2...v1.1.3
 [1.1.2]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/djanta/djantaio-tools-bump/compare/v1.0.1...v1.1.1
 [1.1.0]: https://github.com/djanta/djantaio-tools-bump/compare/v1.0.1...v1.1.0
