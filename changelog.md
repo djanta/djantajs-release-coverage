@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.2] - 2018-05-16
+### Added
+- Fixing *$NPM_EMAIL* by introducing the travis encrypted nmp user email
+
+### Changed
+- Update travis npm deployer by reactivating _*email: $NPM_EMAIL*_
+
 ## [1.1.1] - 2018-05-16
 ### Removed
 - Remove *email: $NPM_EMAIL* section from .travis.yml due to travis npm deploy *invalid option "--email="*
@@ -39,7 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial public version publication.
 
-[Unreleased]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.2...HEAD
+[1.1.2]: https://github.com/djanta/djantaio-tools-bump/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/djanta/djantaio-tools-bump/compare/v1.0.1...v1.1.1
 [1.1.0]: https://github.com/djanta/djantaio-tools-bump/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/djanta/djantaio-tools-bump/compare/v1.0.0...v1.0.1
