@@ -1,0 +1,65 @@
+sudo: false
+dist: trusty
+language: node_js
+node_js:
+  - '7'
+  - '6'
+  - '5'
+  - '4'
+
+before_install:
+  # Parameters used during release
+  - git config user.name "$GH_USER"
+  - git config user.email "$GH_USER_EMAIL"
+
+  # setup https authentication credentials, used by ./mvnw release:prepare
+  - git config credential.helper "store --file=.git/credentials"
+  - echo "https://$GH_TOKEN:@github.com" > .git/credentials
+
+  #- curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` > docker-compose.temp
+
+
+script: echo "Running tests against $(node -v) ..."
+
+after_success:
+  - echo "Running after success step ..."
+
+before_deploy:
+  - echo "Running before deploy step ..."
+
+deploy:
+  provider: npm
+  email: $NPM_EMAIL
+  api_key:
+    secure: TPABHmI0IMJYCPu4akjB74a2g8WoRoMUbkKrFZvwgLHx48CzFBkead2TOgAy+H+Ig7oTmndtp+Ulf6CgTtZpek3ygaRdQhETN3UdXdTPiZECwpryZ79b+RosnOGH92skcsXWP0beDLXc0Vz2QqfWK76o9XbrBU4WJpmiG1Wl+EH7EBfHymNBxYS6eXKlO7AuLA5gpUCMjaqZf7XAdI/p+BT0QHrRZz0j6mpKQ06Dq2awkcll2hdqPzti2nL9Ge5jYFPCLyyd0YfuHn1XQz+1hiyQkGLPx0M3/PJGKtAMm67aT/CpXh5UAlpZaw5PO3nU5tIqvz8MdSW7AoDn584TROMCF6FvBCGFgiqokgnjLmeHYTgYdORLXhHV+s7NQfaHbxQccEZGvbvkeJBPYsJw8xHUwmIgygIV4O++nZpPJBaIcjJtgD1olu2wC7KQm+Wi/r5cTcwWMVimNqv0mLNxjhz/pkdbyd0b4D82r+KsE3aksFQ4Z3U1LwQPmjjHvFIkaN7ArXqFd1J5eA2zIRDsClEGSsd3/D8RPtUyir/Cn0FXPdWolhekfTv9zyXTXzTYyAZbUJYjcT0vC83O9i3Jngnj3MkTfeTEMdmQYlNXFb8V5Pd57nJsAbNO5603hhq4CgrPatrnMEhOmLOK/wk3xC7Iay7RVELHA5ZXLGV5Cug=
+  on:
+    tags: true
+    repo: djanta/djantaio-tools-bump
+
+after_deploy:
+  - echo "Running after deploy step ..."
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - djantaio:1GeeSv1noSekK9to1yTqsbDw#tools
+    on_success: always
+    on_failure: always
+    template:
+      - Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch}
+        by %{author} %{result} in %{duration}
+
+  webhooks:
+    urls:
+      - $GITTER_ROOM
+    on_success: change
+    on_failure: always
+    on_start: never
+    #template:
+      #- "%{repository_slug}#%{build_number} (%{branch} - %{commit} : %{author}): %{message} Change view : %{compare_url} Build details : %{build_url}"
+env:
+  global:
+    secure: jp7D06Y+4XOLRNiCZRQbLB/6q6RyBztzEO0kLHyyw0hQ7s0s3mmPbWRGxfvGIh3xNDLnMuyx+YzrjdhGNLHFNne+ALWcM7HVRAoFwEdr/cXjoC3izUuHNrRWMnyeSIscecf+J/LGjIhqXpmWRmy7i+lt6D7833fayE211dXbfYpqOGhTzX3d/hxLoyo91EGoZDRSRTEU7U4RmklDMud/GWSpy3k0Qgrx2JE8n7hsknMXXMjVYAeykFcndC87bqa9g610mPCeL6MmNirgnU1lLRmn70OFi271N+BGeHLxz/fbGmEjQIIXODi7W8VzFb5rhdFBW98hXIpvQg4k+ZHdySofrg/p0N4SEs70E92szkT+sz0qEkP3a9eaKKFikN8UBLxQG96QNf0VpHHbXMySGulNyj7AOjFZKBxpMEC4YBI0IcLSkJLX0RkyeSjSwShsCrAF98NUdzQ6niYfhZp2Sgeu1ef1h2qQkSTWFLDsqwZCxNhUY8srOIGpOXII0BLcpo1HR08VQFT6CimcSxIVjIiMe0pHxlnmrko3+8y/QYmucArVTGFo60y6fSxrDz8Oj1+rjTFJmEcpbGdPEUBtfw7zhC1Ore8JrD6M2484ugMvA4NNKrzp5JTLlUcfSwYlQi9q/UGHizBmCLbQEySoxIAjwzIG4pkI0nKfLuU5oD4=
+    #Encrypted "GITTER_ROOM"
+    secure: jCgKzV8EI6t+f+ZgWaLlmflJk3lzt4BNmXWotta3euXxRM9l0IluoLTvgsbk7F2A3EhHuI7s9PR8USVWdg/1qGZ3ka+95s78nnywtVeMcr1dB8dGKP0irCXiN0MYJ+/isU/2LT3zoPo+Zca1qIlYBeF+fg5vK9zit2aYJHoxHz487EhRawZfofNzBJ6TI8cp2jriXEcNTXgLZSjvMcWvZVBbCl4iWIXtMv1JL/OVsQpZl27C2J4kW01VTDL7gOZ68gLaNMD2lkAMoFUazlq7a2qyJkBPgRiF/qw4PuBdPz3g57hZLIzm9DizNXv+zcrwDvrFsCW3L0FaLADJVtl8w0+xNz8dG+OYvHmp/gKOFMiuzTxsDGEIA/1feluj1KPozjjion7QF33okaocUIb5Zvpmp22dNDjvBeFbZYAoZZCnwoA4/HYP9e6NpSr8r7m3koqV4xoxTm7dugBrcLYiCnwrv7MB/VoOy12FlHpBP0x0rzN8whzCCZeLzHkZiNYX6GLLggbAKWmEIQCw09a4O/rAjTzRPXLtYD0Tip2ZICL+/CcEDmr45OdD3J4w6wRREE2p8/zP8jksVSL5KB0i0bCd1D2O9uMZUyIqUt/QSDKKtRBEyrnpX3YDQrDJT26uHLl19q+G5FNkyPtnJcviQR6JV9C9LmcxhAWgDzKC3mE=

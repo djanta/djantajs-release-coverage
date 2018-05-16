@@ -4,8 +4,10 @@
 [![npm downloads](https://img.shields.io/npm/dm/djantaio-tools-bump.svg?style=flat-square)](https://www.npmjs.com/package/djantaio-tools-bump)
 [![GitHub tag](https://img.shields.io/github/tag/djanta/djantaio-tools-bump)](https://github.com/djanta/djantaio-tools-bump/tags)
 [![Github All Releases](https://img.shields.io/github/downloads/djanta/djantaio-tools-bump/latest/total.svg)](https://github.com/djanta/djantaio-tools-bump/releases)
+[![Build Status](https://travis-ci.org/djanta/djantaio-tools-bump.svg?branch=master)](https://travis-ci.org/djanta/djantaio-tools-bump)
 [![Dependencies](https://david-dm.org/djanta/djantaio-tools-bump.svg)](https://david-dm.org/bigstickcarpet/djantaio-tools-bump)
 [![License](https://img.shields.io/npm/l/djantaio-tools-bump.svg)](LICENSE)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/djantajs/tools?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 > Uses djanta platform plugin bumping tools.
 
