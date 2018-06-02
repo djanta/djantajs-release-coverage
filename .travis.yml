@@ -16,9 +16,12 @@ before_install:
   - git config credential.helper "store --file=.git/credentials"
   - echo "https://$GH_TOKEN:@github.com" > .git/credentials
 
+install:
+  - echo "Installing ..."
+
 script:
-  - echo "Running tests against $(node -v) ..."
   - echo "Npm deploy email= $NPM_EMAIL"
+  - echo "No npm test needed!"
 
 after_success:
   - echo "Running after success step ..."
@@ -38,6 +41,10 @@ deploy:
 
 after_deploy:
   - echo "Running after deploy step ..."
+  - echo "registry.npmjs.org/:_authToken=/:_authToken=$NPM_TOKEN" >> ~/.npmrc
+  - cat "~/.npmrc"
+   - echo "==================================="
+  - npm config ls -l
 
 notifications:
   email: false

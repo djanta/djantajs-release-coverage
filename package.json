@@ -28,6 +28,7 @@
     "npm": ">=4.6.0"
   },
   "bin": {
+    "djanta-tag": "./release.js",
     "djantaio-bump": "./release.js"
   },
   "main": "release.js",
