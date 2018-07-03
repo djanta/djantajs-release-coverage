@@ -51,7 +51,9 @@
     "bump-prepatch": "./node_modules/.bin/grunt bump:prepatch",
     "bump-prerelease": "./node_modules/.bin/grunt bump:prerelease",
     "bump-preminor": "./node_modules/.bin/grunt bump:preminor",
-    "bump-premajor": "./node_modules/.bin/grunt bump:premajor"
+    "bump-premajor": "./node_modules/.bin/grunt bump:premajor",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -78,6 +80,8 @@
     "semver": "^5.4.1",
     "shelljs": "^0.7.8",
     "verb": "^0.8.10",
-    "yargs": "^8.0.2"
-  }
+    "yargs": "^8.0.2",
+    "snyk": "^1.88.0"
+  },
+  "snyk": true
 }
