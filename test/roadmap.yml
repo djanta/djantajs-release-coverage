@@ -8,8 +8,8 @@ defaults:
     master: master
   version: patch
 
-prerelease:
-  repositories:
+releases:
+  prerelease:
     -
       tag: true
       name: djantaio-bump-test
@@ -26,9 +26,7 @@ prerelease:
           name: lodash
           version: latest
         - dateutil
-
-prepatch:
-  repositories:
+  prepatch:
     -
       tag: true
       name: djantaio-bump-test
@@ -45,9 +43,7 @@ prepatch:
           name: lodash
           version: latest
         - dateutil
-
-patch:
-  repositories:
+  patch:
     -
       tag: true
       name: djantaio-bump-test
@@ -63,9 +59,7 @@ patch:
           name: lodash
           version: latest
         - dateutil
-
-preminor:
-  repositories:
+  preminor:
     -
       tag: true
       name: djantaio-bump-test
@@ -82,9 +76,7 @@ preminor:
           name: lodash
           version: latest
         - dateutil
-
-minor:
-  repositories:
+  minor:
     -
       tag: true
       name: djantaio-bump-test
@@ -101,9 +93,7 @@ minor:
           name: lodash
           version: latest
         - dateutil
-
-premajor:
-  repositories:
+  premajor:
     -
       tag: true
       name: djantaio-bump-test
@@ -120,9 +110,7 @@ premajor:
           name: lodash
           version: latest
         - dateutil
-
-major:
-  repositories:
+  major:
     -
       tag: true
       name: djantaio-bump-test

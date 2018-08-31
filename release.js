@@ -3,13 +3,10 @@
 'use strict';
 
 let path = require('path');
-// let Fs = require('fs');
-let dateformat = require('dateformat');
 let _ = require('lodash');
-let dateutil = require('dateutil');
-// let FORMAT = 'yyyy-mm-dd h:MM:ss';
 let util = require('util');
 let utils = require('./lib/utils');
+let cloader = require;
 
 let argv = require('yargs')
   .usage('Usage: $0 --file [file]')
@@ -84,7 +81,7 @@ let argv = require('yargs')
   .help('help')
   .wrap(null)
   .locale('en')
-  .epilogue('for more information, find our manual at https://www.djanta.io')
+  .epilogue('for more information, find our manual at https://djantajs.io')
 .argv;
 
 let shell = require('shelljs');
@@ -108,58 +105,89 @@ let HAS_GIT_INSTALLED = shell.which('git');
 let HAS_NPM_INSTALLED = shell.which('npm');
 
 let facets = {
-  npm: require('./lib/archetypes/npm')
+  npm: cloader('./lib/archetypes/npm')
 };
 
-let _bump = (name, descriptor, defaults = {}, cache = {}) => {
-  if (name === 'defaults' || !descriptor) { return void undefined; /* Just make the return */ }
+/**
+ * Releasing given function.
+ *
+ * @param {string} type the given archetye
+ * @param {[]|{}|undefined} list the given repository list
+ * @param shared
+ * @param cache
+ * @return {*}
+ * @private
+ */
+let _release = (type, list, shared = {}, cache = {}) => {
+  if (type === 'defaults' || !list) {
+    return void undefined; /* Just make the return */
+  }
 
-  (descriptor.repositories || []).forEach(repository => {
-    repository.url = repository.url || defaults.url;
+  _.each(_.isArray(list) ? list : list.repositories || [], (r) => {
+    r.url = r.url || shared.url;
 
-    repository.remoteUrl = argv['remoteUrl'] || undefined;
-    repository.remote = argv['remote'] || 'origin';
+    r.remoteUrl = argv['remoteUrl'] || undefined;
+    r.remote = argv['remote'] || 'origin';
 
     // Force to update with command line prefix if any ...
-    repository.url = !_.isNil(argv['urlPrefix']) ? argv['urlPrefix'] : repository.url;
+    r.url = !_.isNil(argv['urlPrefix']) ? argv['urlPrefix'] : r.url;
 
-    let sep = repository.url.endsWith('/') ? '' : '/', suffix = repository.name.endsWith('.git') ? '' : '.git',
-      tag = argv['tag'];
+    let sep = r.url.endsWith('/') ? '' : '/';
+    let suffix = r.name.endsWith('.git') ? '' : '.git';
+    let tag = argv['tag'];
 
-    repository = _.merge ({ branch: {} }, defaults, repository, {
-      changelog: argv.changelog || (repository.changelog || (defaults.changelog || true)),
-      href: (repository.url + '' + sep + '' + repository.name) + '' + suffix,
-      version: !_.isNil(tag) ? tag : (!_.isNil(repository.version) ? repository.version : defaults.version),
-      messages: !_.isNil(repository.messages) ? repository.messages : (!_.isNil(defaults.messages) ? defaults.messages
-        : {
-          commit: defaults.commit || 'Incrementing to version %s',
-          tag: defaults.tag || 'Releasing version %s'
-        })
+    r = _.merge ({ branch: {} }, shared, r, {
+      changelog: argv.changelog || (r.changelog || (shared.changelog || true)),
+      href: util.format('%s%s%s%s', r.url, sep, r.name, suffix),
+      version: !_.isNil(tag) ?
+        tag :
+        !_.isNil(r.version) ?
+          r.version :
+          shared.version,
+      // Message property ...
+      messages: !_.isNil(r.messages) ?
+        r.messages :
+        !_.isNil(shared.messages) ?
+          shared.messages :
+          {
+            commit: shared.commit || 'Incrementing to version %s',
+            tag: shared.tag || 'Releasing version %s'
+          }
     });
 
-    let archetype = facets[repository.archetype], directory /* Use npm project type as defaukt facet */;
-    if (utils.isUrl(repository.href) && archetype && (typeof archetype.enabled === 'undefined' || archetype.enabled)
-      && (typeof archetype.which === 'undefined' || archetype.which)) {
+    let archetype = facets[r.archetype];
+    let directory /* Use npm project type as default facet */;
 
-      if (!_.isNil(argv['gitProject']) && utils.isDirectory(argv['gitProject'])) {
-        directory = argv['gitProject'];
-        repository.project = argv['gitProject'];
+    if (utils.isUrl(r.href) && archetype && (_.isNil(archetype.enabled) ||
+      archetype.enabled) && (_.isNil(archetype.which) || archetype.which)) {
+      let project = argv['gitProject'];
+
+      if (!_.isNil(project) && utils.isDirectory(project)) {
+        // directory = argv['gitProject'];
+        // r.project = argv['gitProject'];
+
+        r.project = directory = project;
       }
       else {
-        directory = path.join(CWD, '.djanta-bump'); repository.cleanup = true;
+        directory = path.join(CWD, '.djanta-bump');
+        r.cleanup = true;
       }
 
-      if (!utils.isDirectory(directory)) {
-        shell.mkdir('-p', directory);
-      }
-      archetype.build (repository, directory, (data, err) => {});
+      // create the target working directory ...
+      if (!utils.isDirectory(directory)) { shell.mkdir('-p', directory); }
+
+      archetype.build(r, directory, (data, err) => {});
     }
   });
 };
 
+// Check & trigge the release task if it's exists ...
 if (HAS_GIT_INSTALLED && HAS_NPM_INSTALLED) {
-  let config = YAML.sync(argv.file /*path.resolve(DIRNAME, DEFAULT_ROADMAP)*/ ), defaults = config['defaults'];
-  (argv['roadmap'] || Object.keys (_.omit(config, ['defaults']))).forEach(name => _bump (name, config[name], defaults));
+  let yml = YAML.sync(argv.file /* path.resolve(DIRNAME, DEFAULT_ROADMAP) */);
+  let common = yml['defaults'];
+
+  (argv['roadmap'] || Object.keys(_.omit(yml, ['defaults'])))
+    .forEach((nm) => _release(nm, yml['releases'][nm] || yml[nm], common));
 }
 else {
   shell.echo ('Sorry, this script requires git');

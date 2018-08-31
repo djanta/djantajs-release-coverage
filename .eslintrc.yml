@@ -1,0 +1,20 @@
+---
+root: true
+parser: esprima
+parserOptions:
+  ecmaVersion: 6
+  sourceType: module
+  ecmaFeatures:
+    impliedStrict: false
+
+extends:
+  - eslint:recommended
+  - djantajs
+
+env:
+  node: true
+  es6: true
+  jasmine: true
+
+globals:
+  djantajs: true

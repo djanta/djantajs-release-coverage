@@ -2,9 +2,6 @@
 
 /* eslint no-sync:0 */
 
-let fs = require('fs');
-let path = require('path');
-
 module.exports = (grunt) => {
   grunt.loadNpmTasks('grunt-bump');
 
@@ -27,6 +24,6 @@ module.exports = (grunt) => {
         metadata: '',
         regExp: false
       }
-    },
+    }
   });
 };
