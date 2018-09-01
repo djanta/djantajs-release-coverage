@@ -4,11 +4,10 @@
   "description": "djanta.io releasing tool module based on node implementation",
   "homepage": "https://djantajs.io",
   "license": "MIT",
-  "author": {
-    "name": "Stanislas Koffi ASSOUTOVI",
-    "email": "team.dev@djanta.io",
-    "url": "www.djanta.io"
-  },
+  "author": "Stanislas KOFFI ASSOUTOVI <stanislaska@djantajs.io> (https://github.com/stanislaska)",
+  "contributors": [
+    "Stanislas KOFFI ASSOUTOVI <stanislaska@djantajs.io> (https://github.com/stanislaska)"
+  ],
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com/djantaio/djantajs-release-tools.git"
@@ -34,7 +33,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "snyk": true,
   "scripts": {
+    "build": "echo '== echo =='",
     "precompile": "npm run clean",
     "clean": "./node_modules/.bin/rimraf .djanta-rc.json .nyc_output coverage test/reports",
     "compile": "echo compiling ...",
@@ -52,13 +53,15 @@
     "bump-preminor": "./node_modules/.bin/grunt bump:preminor",
     "bump-premajor": "./node_modules/.bin/grunt bump:premajor",
 
+    "prepare": "npm run snyk-protect",
     "coverage": "npm run coverage:coveralls && npm run coverage:codeclimate",
     "coverage:codeclimate": "./node_modules/.bin/nyc report --reporter=lcov | ./node_modules/.bin/codeclimate-test-reporter < ./coverage/lcov.info",
     "coverage:coveralls": "./node_modules/.bin/nyc report --reporter=text-lcov | ./node_modules/coveralls/bin/coveralls.js",
     "snyk": "./node_modules/.bin/snyk test --file=./package.json",
     "snyk:publish": "./node_modules/.bin/snyk wizard --file=./package.json",
     "snyk:monitor": "./node_modules/.bin/snyk monitor --file=./package.json",
-    "snyk:login": "./node_modules/.bin/snyk auth"
+    "snyk:login": "./node_modules/.bin/snyk auth",
+    "snyk-protect": "./node_modules/.bin/snyk protect"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -66,19 +69,19 @@
     "eslint": "^4.5.0",
     "eslint-plugin-nodeca": "^1.0.3",
     "jshint": "^2.9.5",
-    "mocha": "^3.3.0",
+    "mocha": "^5.2.0",
     "should": "^11.2.1",
-    "standard": "^10.0.2",
+    "standard": "^12.0.1",
     "grunt-bump": "^0.8.0",
     "grunt": "^1.0.2",
     "eslint-config-djantajs": "^1.1.0",
     "coveralls": "^3.0.1",
     "snyk": "^1.94.0",
     "rimraf": "^2.6.2",
-    "codeclimate-test-reporter": "^0.5.0",
-    "nyc": "^13.0.1"
+    "codeclimate-test-reporter": "^0.5.0"
   },
   "dependencies": {
+    "nyc": "^13.0.1",
     "chalk": "^1.1.3",
     "changelog": "^1.4.1",
     "editorconfig": "^0.15.0",
