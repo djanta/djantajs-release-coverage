@@ -1,42 +1,95 @@
 sudo: required
 language: node_js
 dist: trusty
+
 node_js:
   - '8'
+
+# Don't build release tags. This avoids publish conflicts because the version commit exists both on master and the release tag.
+# See https://github.com/travis-ci/travis-ci/issues/1532
 branches:
-  except:
-    - /^pr\\..*/"=
-    - "/^features\\\\..*/"
+#  except:
+#  - /^[0-9]/
+
+  # safelist
+  only:
+  - master
+  - develop
+  - release
+  - /^((rc|v|version|release|tag)(-)?)?([0-9\.]+)((-)?(patch|beta|alpha))?$/
+
+stages:
+  - name: develop
+    if: (branch = develop AND type != pull_request) AND commit_message !~ /^(prepare release ([0-9\.]+))$/
+  - name: snapshot
+    if: branch = master AND type != pull_request AND commit_message !~ /^(prepare release ([0-9\.]+))$/
+  - name: release
+    ## Validator: https://regex101.com/
+    if: tag =~ /^((rc|v|version|release|tag)(-)?)?([0-9\.]+)((-)?(patch|beta|alpha))?$/
+
 before_install:
-  - git clone https://github.com/djanta/travis-npm-deploy.git ~/travis-npm-deploy
+  # Parameters used during release
+  - git config user.name "$GH_USER"
+  - git config user.email "$GH_USER_EMAIL"
+
+  # setup https authentication credentials, used by ./mvnw release:prepare
+  - git config credential.helper "store --file=.git/credentials"
+  - echo "https://$GH_TOKEN:@github.com" > .git/credentials
+
+  # Download and configure npm travis release tool
+  - travis_wait 30 travis_retry git clone https://github.com/djanta/travis-npm-deploy.git ~/travis-npm-deploy
   - chmod +x ~/travis-npm-deploy/deploy.sh && chmod +x ~/travis-npm-deploy/npm/*.sh
   - bash ~/travis-npm-deploy/deploy.sh --git-config
+
 install:
   - bash ~/travis-npm-deploy/deploy.sh --install
-  - npm i --verbose
   - 'echo "repo_token: $COVERALLS_REPO_TOKEN" > "./.coveralls.yml"'
   - npm run snyk:login -- $SNYK_TOKEN
-script:
-  - npm test
-after_script:
-  # - npm run-script coverage-push
-  - "echo Running after script context ..."
-after_success:
-  - npm run snyk:monitor
-  - npm run coverage
-before_deploy:
-  - bash ~/travis-npm-deploy/deploy.sh login --user=$NPM_USER --password=$NPM_PWD --email=$NPM_EMAIL --scope=$NPM_SCOPE
-deploy:
-  - provider: script
-    skip_cleanup: true
-    email: "$NPM_EMAIL"
-    script: "~/travis-npm-deploy/deploy.sh"
-    on:
-      tags: true
-      repo: djanta/djantajs-release-tools
-after_deploy:
-  - echo "Running after deploy step ..."
-  - bash ~/travis-npm-deploy/deploy.sh logout
+
+jobs:
+  include:
+    - stage: develop
+      name: "Build and Unit Testing the develop & PR branch"
+      install: true
+      script:
+        # Always run npm testing ...
+        - npm test
+      after_script:
+        # - npm run-script coverage-push
+        - "echo Running after script context ..."
+      after_success:
+        - npm run snyk:monitor
+
+    - stage: snapshot
+      name: "Deploy Snapshot to Maven repo"
+      install: true
+      script:
+        # Always run npm testing ...
+        - npm test
+      after_script:
+        # - npm run-script coverage-push
+        - "echo Running after script context ..."
+      after_success:
+        - npm run snyk:monitor
+        - npm run coverage
+
+    - stage: release
+      name: "Release, Tag & push the released version"
+      install: true
+      before_deploy:
+        - bash ~/travis-npm-deploy/deploy.sh login --user=$NPM_USER --password=$NPM_PWD --email=$NPM_EMAIL --scope=$NPM_SCOPE
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: travis_wait 30 travis_retry ~/travis-npm-deploy/deploy.sh
+        on:
+          tags: true
+          #repo: djanta/djantajs-release-coverage
+          branch: release
+      after_deploy:
+        - echo "Login out ..."
+        - bash ~/travis-npm-deploy/deploy.sh logout
+
 notifications:
   email: false
   slack:

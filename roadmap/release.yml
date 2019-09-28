@@ -1,4 +1,4 @@
-defaults:
+defaults: &global
   commit: tagging version to
   #action: patch #major|prerelease|premajor|minor|preminor|patch|prepatch
   url: git+ssh://git@github.com/djantaio/
@@ -8,11 +8,13 @@ defaults:
   branch:
     draft: develop
     master: master
+
 alpha:
   due: always #the first date of each month
   repositories:
     -
-      name: djantaio-tools-bump
+      <<: *global
+      name: djantajs-release-coverage
       branch:
         master: master
         draft: develop

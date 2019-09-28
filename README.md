@@ -1,12 +1,12 @@
-# djantaio-tools-bump
+# djantajs-release-coverage
 
-[![npm version](https://img.shields.io/npm/v/djantaio-tools-bump?style=flat-square)](https://www.npmjs.com/package/djantaio-tools-bump)
-[![npm downloads](https://img.shields.io/npm/dm/djantaio-tools-bump.svg?style=flat-square)](https://www.npmjs.com/package/djantaio-tools-bump)
-[![GitHub tag](https://img.shields.io/github/tag/djanta/djantaio-tools-bump)](https://github.com/djanta/djantaio-tools-bump/tags)
-[![Github All Releases](https://img.shields.io/github/downloads/djanta/djantaio-tools-bump/latest/total.svg)](https://github.com/djanta/djantaio-tools-bump/releases)
-[![Build Status](https://travis-ci.org/djanta/djantaio-tools-bump.svg?branch=master)](https://travis-ci.org/djanta/djantaio-tools-bump)
-[![Dependencies](https://david-dm.org/djanta/djantaio-tools-bump.svg)](https://david-dm.org/bigstickcarpet/djantaio-tools-bump)
-[![License](https://img.shields.io/npm/l/djantaio-tools-bump.svg)](LICENSE)
+[![npm version](https://img.shields.io/npm/v/djantajs-release-coverage?style=flat-square)](https://www.npmjs.com/package/djantajs-release-coverage)
+[![npm downloads](https://img.shields.io/npm/dm/djantajs-release-coverage.svg?style=flat-square)](https://www.npmjs.com/package/djantajs-release-coverage)
+[![GitHub tag](https://img.shields.io/github/tag/djanta/djantajs-release-coverage)](https://github.com/djanta/djantajs-release-coverage/tags)
+[![Github All Releases](https://img.shields.io/github/downloads/djanta/djantajs-release-coverage/latest/total.svg)](https://github.com/djanta/djantajs-release-coverage/releases)
+[![Build Status](https://travis-ci.org/djanta/djantajs-release-coverage.svg?branch=master)](https://travis-ci.org/djanta/djantajs-release-coverage)
+[![Dependencies](https://david-dm.org/djanta/djantajs-release-coverage.svg)](https://david-dm.org/bigstickcarpet/djantajs-release-coverage)
+[![License](https://img.shields.io/npm/l/djantajs-release-coverage.svg)](LICENSE)
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/djantajs/tools?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 > Uses djanta platform plugin bumping tools.
@@ -31,18 +31,17 @@
 
 Installation
 --------------------------
-You can install `djantaio-tools-bump` via [npm](https://docs.npmjs.com/getting-started/what-is-npm).
+You can install `djantajs-release-coverage` via [npm](https://docs.npmjs.com/getting-started/what-is-npm).
 
 ```bash
-npm install -g djantaio-tools-bump
+npm install -g djantajs-release-coverage
 ```
-
 
 Usage
 --------------------------
 
 ```bash
-Usage: djantaio-bump [options]
+Usage: djantajs-tag [options]
 
 Options:
 
@@ -55,13 +54,15 @@ Options:
   -c, --changelog      Use this option to define whether or not the change log file should be generated
   -e, --roadmap        Specify the roadmap list to execute  [array]
   -p, --git-project    Specify the local Git project directory
+  
+Helper Options:
   --help               Show help  [boolean]
 
 Examples:
 
-  $ djantaio-bump --file <MANIFEST FILE> ...
-  $ djantaio-bump --file <MANIFEST FILE> -e <ROADMAP NAME> -e <ROADMAP NAME2> -e <ROADMAP n...> ...
-  $ djantaio-bump --file <MANIFEST FILE> --semver-tag <YOUR TAEGET VERSION> ...
+  $ djantajs-tag --file <MANIFEST FILE> ...
+  $ djantajs-tag --file <MANIFEST FILE> -e <ROADMAP NAME> -e <ROADMAP NAME2> -e <ROADMAP n...> ...
+  $ djantajs-tag --file <MANIFEST FILE> --semver-tag <YOUR TAEGET VERSION> ...
 ```
 
 Manifest Overview
@@ -69,7 +70,7 @@ Manifest Overview
 As specified with the option `--file`, here below how you can declare your manifest file
 
 ```yaml
-defaults:
+defaults: &global
   url: git@github.com:djanta
   origin: origin
   changelog: true
@@ -82,6 +83,7 @@ defaults:
 prerelease:
   repositories:
     -
+      <<: *global
       tag: true
       name: djantaio-bump-test
       version: prerelease
@@ -146,7 +148,8 @@ Here's where you can define the target repository name without the `.git` extens
 **Default value**: `npm` <br/>
 _**Required**_: `true`
 
-Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, this can be overrided with the comment line `--archetype`
+Define which archetype should be use to bump you project version. By the default `npm` archetype will be used. However, 
+this can be overrided with the comment line `--archetype`
 
 ###### options`.<#roadmap>`.repositories.branch
 **Type**: `Object` <br/>
@@ -183,7 +186,7 @@ _**Required**_: `false`
 
 Version Scripts
 --------------------------
-`djantaio-tools-bump` will execute your `preversion`, `version`, and `postversion` scripts, just like [the `npm version` command](https://docs.npmjs.com/cli/version) does. If your `package.json` file contains any or all of these scripts, then they will be executed in the following order:
+`djantajs-release-coverage` will execute your `preversion`, `version`, and `postversion` scripts, just like [the `npm version` command](https://docs.npmjs.com/cli/version) does. If your `package.json` file contains any or all of these scripts, then they will be executed in the following order:
 
   - The `preversion` script runs before the version is updated (and before the version prompt is shown)
   - The `version` script runs after the version is updated, but _before_ `git commit` and `git tag`
@@ -191,14 +194,14 @@ Version Scripts
 
 Contributing
 --------------------------
-I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/djanta/djantaio-tools-bump/issues) on GitHub and [submit a pull request](https://github.com/djantaio/djantaio-tools-bump/pulls).
+I welcome any contributions, enhancements, and bug-fixes.  [File an issue](https://github.com/djanta/djantajs-release-coverage/issues) on GitHub and [submit a pull request](https://github.com/djantaio/djantajs-release-coverage/pulls).
 
 #### Building
 To build the project locally on your computer:
 
 1. __Clone this repo__
 ```bash
-git clone https://github.com/djanta/djantaio-tools-bump.git
+git clone https://github.com/djanta/djantajs-release-coverage.git
 ```
 
 2. __Install dependencies__
@@ -210,8 +213,3 @@ npm install
 ```bash
 npm test
 ```
-
-
-
-License
---------------------------

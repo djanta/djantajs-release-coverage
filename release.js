@@ -49,8 +49,8 @@ let argv = require('yargs')
     .describe('U', 'Define the target git remote url to point to')
 
     //Define the roadmap due options
-    .alias('a', 'archetype')
-    .describe('a', 'Use this option to define what kind of the project artifact should be exclusivly bump')
+    .alias('a', 'facet')
+    .describe('a', 'Use this option to define what kind of the project artifact should be released')
     .default('a', 'npm')
     .coerce('facet', (facet) => facet)
 
@@ -105,7 +105,7 @@ let HAS_GIT_INSTALLED = shell.which('git');
 let HAS_NPM_INSTALLED = shell.which('npm');
 
 let facets = {
-  npm: cloader('./lib/archetypes/npm')
+  npm: cloader('./lib/facets/npm')
 };
 
 /**
@@ -183,11 +183,18 @@ let _release = (type, list, shared = {}, cache = {}) => {
 
 // Check & trigge the release task if it's exists ...
 if (HAS_GIT_INSTALLED && HAS_NPM_INSTALLED) {
-  let yml = YAML.sync(argv.file /* path.resolve(DIRNAME, DEFAULT_ROADMAP) */);
+  /*
+  let yml = YAML.sync(argv.file);
   let common = yml['defaults'];
 
   (argv['roadmap'] || Object.keys(_.omit(yml, ['defaults'])))
     .forEach((nm) => _release(nm, yml['releases'][nm] || yml[nm], common));
+  */
+
+  YAML.sync(argv.file, (err, data) => {
+    (argv['roadmap'] || Object.keys(_.omit(data, ['defaults'])))
+      .forEach((nm) => _release(nm, data['releases'][nm] || data[nm], {}));
+  });
 }
 else {
   shell.echo ('Sorry, this script requires git');
