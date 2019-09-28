@@ -1,13 +1,13 @@
 # djantajs-release-coverage
 
-[![npm version](https://img.shields.io/npm/v/djantajs-release-coverage?style=flat-square)](https://www.npmjs.com/package/djantajs-release-coverage)
-[![npm downloads](https://img.shields.io/npm/dm/djantajs-release-coverage.svg?style=flat-square)](https://www.npmjs.com/package/djantajs-release-coverage)
 [![GitHub tag](https://img.shields.io/github/tag/djanta/djantajs-release-coverage)](https://github.com/djanta/djantajs-release-coverage/tags)
+[![npm version](https://img.shields.io/npm/v/djantajs-release-coverage)](https://www.npmjs.com/package/djantajs-release-coverage)
+[![npm downloads](https://img.shields.io/npm/dm/djantajs-release-coverage.svg)](https://www.npmjs.com/package/djantajs-release-coverage)
 [![Github All Releases](https://img.shields.io/github/downloads/djanta/djantajs-release-coverage/latest/total.svg)](https://github.com/djanta/djantajs-release-coverage/releases)
 [![Build Status](https://travis-ci.org/djanta/djantajs-release-coverage.svg?branch=master)](https://travis-ci.org/djanta/djantajs-release-coverage)
 [![Dependencies](https://david-dm.org/djanta/djantajs-release-coverage.svg)](https://david-dm.org/bigstickcarpet/djantajs-release-coverage)
 [![License](https://img.shields.io/npm/l/djantajs-release-coverage.svg)](LICENSE)
-[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square)](https://gitter.im/djantajs/tools?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/djantajs/tools?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 > Uses djanta platform plugin bumping tools.
 
@@ -41,7 +41,7 @@ Usage
 --------------------------
 
 ```bash
-Usage: djantajs-tag [options]
+Usage: release [options]
 
 Options:
 
@@ -60,9 +60,9 @@ Helper Options:
 
 Examples:
 
-  $ djantajs-tag --file <MANIFEST FILE> ...
-  $ djantajs-tag --file <MANIFEST FILE> -e <ROADMAP NAME> -e <ROADMAP NAME2> -e <ROADMAP n...> ...
-  $ djantajs-tag --file <MANIFEST FILE> --semver-tag <YOUR TAEGET VERSION> ...
+  $ release --file <MANIFEST FILE> ...
+  $ release --file <MANIFEST FILE> -e <ROADMAP NAME> -e <ROADMAP NAME2> -e <ROADMAP n...> ...
+  $ release --file <MANIFEST FILE> --semver-tag <YOUR TAEGET VERSION> ...
 ```
 
 Manifest Overview

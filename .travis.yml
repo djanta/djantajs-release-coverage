@@ -41,6 +41,9 @@ before_install:
   - chmod +x ~/travis-npm-deploy/deploy.sh && chmod +x ~/travis-npm-deploy/npm/*.sh
   - bash ~/travis-npm-deploy/deploy.sh --git-config
 
+  # Install the given current project dependencies
+  - npm i
+
 install:
   - bash ~/travis-npm-deploy/deploy.sh --install
   - 'echo "repo_token: $COVERALLS_REPO_TOKEN" > "./.coveralls.yml"'
